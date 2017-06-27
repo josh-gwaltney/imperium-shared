@@ -1,0 +1,14 @@
+{
+  "name": "imperium-shared",
+  "version": "1.0.0",
+  "author": "Josh Gwaltney",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/josh-gwaltney/imperium-shared.git"
+  },
+  "bugs": {
+    "url": "https://github.com/josh-gwaltney/imperium-shared/issues"
+  },
+  "homepage": "https://github.com/josh-gwaltney/imperium-shared#readme",
+  "license": "MIT"
+}
