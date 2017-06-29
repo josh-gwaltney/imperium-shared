@@ -10,5 +10,14 @@
     "url": "https://github.com/josh-gwaltney/imperium-shared/issues"
   },
   "homepage": "https://github.com/josh-gwaltney/imperium-shared#readme",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "babel-cli": "latest",
+    "babel-core": "latest",
+    "babel-loader": "latest",
+    "babel-preset-es2015": "latest",
+    "babel-preset-es2016": "latest",
+    "babel-preset-es2017": "latest",
+    "babel-preset-stage-2": "latest"
+  }
 }
