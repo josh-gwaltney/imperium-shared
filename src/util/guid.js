@@ -20,7 +20,7 @@ class Guid {
 
   static create() {
     return this.createSegment() + this.createSegment() + this.createSegment() + this.createSegment() + this.createSegment() + this.createSegment()
-      + this.createSegment() + '-' + this.createSegment();
+      + this.createSegment() + this.createSegment();
   };
 }
 
