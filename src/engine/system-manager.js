@@ -38,20 +38,25 @@ class SystemManager {
   // Public Methods
   ////////////////////////////////////////////////////////////////////////////////
   update(state){
-
+    for(let key in this._systems){
+      let system = this._systems[key];
+      system.update(state);
+    }
   }
 
   ////////////////////////////////////////////////////////////////////////////////
   // Private Methods
   ////////////////////////////////////////////////////////////////////////////////
   _init(config){
-
+    config.forEach((system) => {
+      this._addSystem(system);
+    })
   }
 
-  _addSystem(name, constructor){
-    if(!this._hasSystem(name)){
-      let system = new constructor();
-      this._systems[name] = system;
+  _addSystem(template){
+    if(!this._hasSystem(template.id)){
+      let system = new template.constructor();
+      this._systems[template.id] = system;
       return true;
     }
     return false;

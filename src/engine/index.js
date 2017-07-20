@@ -10,10 +10,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 import { timestamp } from '../util/timestamp';
 import EntityManager from './entity-manager';
-import ComponentManager from './component-manager';
 import AssemblageManager from './assemblage-manager';
 import StateManager from './state-manager';
-import SystemManager from './system-manager';
 
 ////////////////////////////////////////////////////////////////////////////////
 // Definitions
@@ -22,6 +20,9 @@ import SystemManager from './system-manager';
 ////////////////////////////////////////////////////////////////////////////////
 // Class
 ////////////////////////////////////////////////////////////////////////////////
+/**
+ * @memberof module:engine
+ */
 class Engine {
 
   //////////////////////////////////////////////////////////////////////////////
@@ -38,8 +39,8 @@ class Engine {
   // Public Properties
   //////////////////////////////////////////////////////////////////////////////
 
-  constructor(messageBus, stateManager, systemManager){
-    this._messageBus = messageBus;
+  constructor(messageService, stateManager, systemManager){
+    this._messageService = messageService;
     this._stateManager = stateManager;
     this._systemManager = systemManager;
     this._frame = null;
@@ -52,16 +53,21 @@ class Engine {
   //////////////////////////////////////////////////////////////////////////////
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
-  start(){
-    if(this._frame){
+  start(initialState) {
+    if (this._frame) {
         window.cancelAnimationFrame(this._frame);
     }
+    this._stateManager.createState();
+    let state = this._stateManager.state;
+    initialState.forEach((gameObject) => {
+      state.createEntity(gameObject);
+    });
     this._lastTick = timestamp();
     this._tick();
   }
 
-  stop(){
-    if(this._frame){
+  stop() {
+    if (this._frame) {
       window.cancelAnimationFrame(this._frame);
     }
   }
@@ -73,7 +79,7 @@ class Engine {
 
   }
 
-  _tick(){
+  _tick() {
     let now = timestamp();
     this._frame = window.requestAnimationFrame(() => this._tick());
     let delta = now - this._lastTick;
@@ -84,12 +90,15 @@ class Engine {
 
   _update(dt){
     //let state = this._stateManager.state;
-    //this._systemManager.update(state);
+    let state = this._stateManager.state;
+    this._systemManager.update(state);
   }
 
   _render(dt){
-    //let state = this._stateManager.state;
-    //this._messageBus.publish({name: 'RENDER', body: state});
+    let state = this._stateManager.state;
+    let renderables = state.findEntitiesByAssemblage('cell');
+
+    this._messageService.publish({ subject: 'RENDER', body: renderables });
   }
 }
 

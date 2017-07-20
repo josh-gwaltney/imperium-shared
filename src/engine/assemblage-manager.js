@@ -28,9 +28,9 @@ class AssemblageManager {
   // Public Properties
   //////////////////////////////////////////////////////////////////////////////
 
-  constructor(){
+  constructor(config){
     this._templates = {};
-    this._init();
+    this._init(config);
   }
 
   //////////////////////////////////////////////////////////////////////////////
@@ -46,15 +46,17 @@ class AssemblageManager {
   //////////////////////////////////////////////////////////////////////////////
   // Private Methods
   //////////////////////////////////////////////////////////////////////////////
-  _init(){
-
+  _init(config){
+    config.forEach((template) => {
+      this._addTemplate(template);
+    })
   }
 
   _addTemplate(template){
-    let id = template.id;
+    let name = template.name;
     let components = template.components;
-    if(!this._templates[id]){
-        this._templates[id] = components;
+    if(!this._templates[name]){
+        this._templates[name] = components;
     }
   }
 }

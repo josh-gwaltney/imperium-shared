@@ -34,16 +34,12 @@ class MessageService {
   // Public Methods
   ////////////////////////////////////////////////////////////////////////////////
   subscribe(msg, sub){
-    if(!(msg in this._subscribers)){
+    if(!(this._subscribers[msg])){
       this._subscribers[msg] = [];
     }
 
     let subs = this._subscribers[msg];
-    let idx = subs.indexOf(sub);
-
-    if(idx === -1) {
-      subs.push(sub);
-    }
+    subs.push(sub);
   }
 
   unsubscribe(msg, sub){

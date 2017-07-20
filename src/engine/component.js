@@ -17,6 +17,9 @@ import Guid from '../util/guid';
 ////////////////////////////////////////////////////////////////////////////////
 // Class
 ////////////////////////////////////////////////////////////////////////////////
+/**
+ * @memberof module:engine
+ */
 class Component {
 
   //////////////////////////////////////////////////////////////////////////////
@@ -32,7 +35,7 @@ class Component {
   //////////////////////////////////////////////////////////////////////////////
   // Public Properties
   //////////////////////////////////////////////////////////////////////////////
-  get id(){
+  get id() {
     return this._id;
   }
 
@@ -42,25 +45,22 @@ class Component {
 
   /**
    * @constructor
-   * @param entityId
    * @param state
    */
-  //constructor (entityId, state) {
   constructor (state) {
-    if (state === null){
+    if (state === null) {
       throw new Error('Component state cannot be null');
     }
 
     this._id = Guid.create();
-    //this._entityId = entityId;
   };
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
-  update(state){
+  update(state) {
     let self = this;
-    for(let key in state){
+    for (let key in state) {
       if(state.hasOwnProperty(key) && self.hasOwnProperty('_' + key)) {
         self['_' + key] = state[key];
       }

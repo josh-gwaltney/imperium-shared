@@ -1,8 +1,8 @@
 /**
- * Imperium 4X (Shared) - Logger
+ * Imperium 4X (Shared) - Ajax Service
  * ===
  *
- * @module logger
+ * @module ajaxService
  */
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -12,6 +12,14 @@
 ////////////////////////////////////////////////////////////////////////////////
 // Definitions
 ////////////////////////////////////////////////////////////////////////////////
+const METHOD = {
+  DELETE: 'DELETE',
+  GET: 'GET',
+  HEAD: 'HEAD',
+  PATCH: 'PATCH',
+  POST: 'POST',
+  PUT: 'PUT'
+};
 
 ////////////////////////////////////////////////////////////////////////////////
 // Class
@@ -21,6 +29,7 @@ class AjaxService {
   //////////////////////////////////////////////////////////////////////////////
   // Private Properties
   //////////////////////////////////////////////////////////////////////////////
+  _xhr;
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Properties
@@ -33,29 +42,48 @@ class AjaxService {
   ////////////////////////////////////////////////////////////////////////////////
   // Public Methods
   ////////////////////////////////////////////////////////////////////////////////
-  load(f){
-    let text;
-    let rawFile = new XMLHttpRequest();
-    rawFile.open('GET', f, false);
-    rawFile.onreadystatechange = function(){
-      if(rawFile.readyState === 4){
-        if(rawFile.status === 200 || rawFile.status == 0){
-          let res = rawFile.responseText;
-          text = res;
-        }
-      }
-    };
-    rawFile.send();
-    return text;
+  delete(url){
+    return this._send(METHOD.DELETE, url);
   }
 
-  makeRequest(method, url){
-    return new Promise((resolve, reject) => {
+  get(options){
+    return this._send(METHOD.GET, options);
+  }
+
+  head(url){
+    return this._send(METHOD.HEAD, url);
+  }
+
+  patch(url){
+    return this._send(METHOD.PATCH, url);
+  }
+
+  post(options){
+    return this._send(METHOD.POST, options);
+  }
+
+  put(url){
+    return this._send(METHOD.PUT, url);
+  }
+
+  ////////////////////////////////////////////////////////////////////////////////
+  // Private Methods
+  ////////////////////////////////////////////////////////////////////////////////
+  _send(method, options){
+    return new Promise(function(resolve, reject) {
       let xhr = new XMLHttpRequest();
-      xhr.open(method, url);
+
+      xhr.open(method, options.url);
+
+      for (let header in options.headers){
+        let value = options.headers[header];
+
+        xhr.setRequestHeader(header, value);
+      }
+
       xhr.onload = function() {
         if (this.status >= 200 && this.status < 300) {
-          resolve(xhr.response)
+          resolve(xhr)
         } else {
           reject({
             status: this.status,
@@ -63,21 +91,21 @@ class AjaxService {
           });
         }
       };
+
       xhr.onerror = function(){
         reject({
           status: this.status,
           statusText: xhr.statusText
         });
       };
-      xhr.send();
+
+      xhr.send(options.body);
+
     });
   }
-
-  ////////////////////////////////////////////////////////////////////////////////
-  // Private Methods
-  ////////////////////////////////////////////////////////////////////////////////
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 ////////////////////////////////////////////////////////////////////////////////
+export default AjaxService;

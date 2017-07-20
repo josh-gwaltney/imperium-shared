@@ -13,6 +13,9 @@ import Component from './component';
 ////////////////////////////////////////////////////////////////////////////////
 // Class
 ////////////////////////////////////////////////////////////////////////////////
+/**
+ * @memberof module:engine
+ */
 class ComponentManager {
 
   //////////////////////////////////////////////////////////////////////////////
@@ -52,13 +55,15 @@ class ComponentManager {
   }
 
   findComponentsByType(type){
-    let results = [];
+    let template = this._findTemplate(type);
+    let constructor = template.constructor;
+    let components = [];
     this._components.find(x => {
-      if(x instanceof type === true){
-        results.push(x);
+      if(x instanceof constructor === true){
+        components.push(x);
       }
     });
-    return results;
+    return components;
   }
 
   removeComponent(id){
